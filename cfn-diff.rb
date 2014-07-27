@@ -35,7 +35,29 @@ def new_template()
   JSON.parse!(contents)
 end
 
+# print modifications between new and old
+# (in this order)
+def modifications(hash)
+    hash.each do |k,v|
+      # if we have an array then we have a modification
+      # (and the array has 2 elements)
+      if v.kind_of?(Array)
+        if (v[0] and v[1])
+          puts "M #{k}"
+        elsif v[0]
+          puts "A #{k}"
+        else
+          puts "D #{k}"
+        end
+      end
+      # If we have a hash then we need to explore further
+      if v.kind_of?(Hash)
+        modifications(v)
+      end
+    end
+end
+
 new_h = new_template()
 old_h = actual_template()
 
-pp new_h.deep_diff(old_h)
+modifications(new_h.deep_diff(old_h))
