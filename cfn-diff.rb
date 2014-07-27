@@ -17,7 +17,8 @@ class Hash
   end
  
 end
- 
+
+require 'pp'
 require 'json'
 
 def actual_template()
@@ -36,4 +37,4 @@ end
 new_h = new_template()
 old_h = actual_template()
 
-puts new_h.deep_diff(old_h)
+pp new_h.deep_diff(old_h)
