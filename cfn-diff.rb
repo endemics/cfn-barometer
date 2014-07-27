@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
 class Hash
- 
+
+  # from https://gist.github.com/henrik/146844
   def deep_diff(b)
     a = self
     (a.keys | b.keys).inject({}) do |diff, k|
