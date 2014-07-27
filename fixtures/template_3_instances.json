@@ -31,7 +31,7 @@
   },
 
   "Resources" : {
-    "Ec2Instance" : {
+    "Ec2Instance1" : {
       "Type" : "AWS::EC2::Instance",
       "Properties" : {
         "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
@@ -39,7 +39,15 @@
         "ImageId" : { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMI" ]}
       }
     },
-    "Ec2Instance1" : {
+    "Ec2Instance2" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
+        "KeyName" : { "Ref" : "KeyName" },
+        "ImageId" : { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMI" ]}
+      }
+    },
+    "Ec2Instance3" : {
       "Type" : "AWS::EC2::Instance",
       "Properties" : {
         "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
@@ -62,17 +70,41 @@
   },
 
   "Outputs" : {
-    "InstanceId" : {
+    "Instance1Id" : {
       "Description" : "InstanceId of the newly created EC2 instance",
-      "Value" : { "Ref" : "Ec2Instance" }
+      "Value" : { "Ref" : "Ec2Instance1" }
     },
-    "AZ" : {
+    "Instance2Id" : {
+      "Description" : "InstanceId of the newly created EC2 instance",
+      "Value" : { "Ref" : "Ec2Instance2" }
+    },
+    "Instance3Id" : {
+      "Description" : "InstanceId of the newly created EC2 instance",
+      "Value" : { "Ref" : "Ec2Instance3" }
+    },
+    "AZ1" : {
       "Description" : "Availability Zone of the newly created EC2 instance",
-      "Value" : { "Fn::GetAtt" : [ "Ec2Instance", "AvailabilityZone" ] }
+      "Value" : { "Fn::GetAtt" : [ "Ec2Instance1", "AvailabilityZone" ] }
     },
-    "PublicIP" : {
+    "PublicIP1" : {
       "Description" : "Public IP address of the newly created EC2 instance",
-      "Value" : { "Fn::GetAtt" : [ "Ec2Instance", "PublicIp" ] }
+      "Value" : { "Fn::GetAtt" : [ "Ec2Instance1", "PublicIp" ] }
+    },    
+    "AZ2" : {
+      "Description" : "Availability Zone of the newly created EC2 instance",
+      "Value" : { "Fn::GetAtt" : [ "Ec2Instance2", "AvailabilityZone" ] }
+    },
+    "PublicIP2" : {
+      "Description" : "Public IP address of the newly created EC2 instance",
+      "Value" : { "Fn::GetAtt" : [ "Ec2Instance2", "PublicIp" ] }
+    },    
+    "AZ3" : {
+      "Description" : "Availability Zone of the newly created EC2 instance",
+      "Value" : { "Fn::GetAtt" : [ "Ec2Instance3", "AvailabilityZone" ] }
+    },
+    "PublicIP3" : {
+      "Description" : "Public IP address of the newly created EC2 instance",
+      "Value" : { "Fn::GetAtt" : [ "Ec2Instance3", "PublicIp" ] }
     }
   }
 }
