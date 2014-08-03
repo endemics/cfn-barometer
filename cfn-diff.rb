@@ -30,7 +30,8 @@ def actual_template()
 end
 
 def new_template()
-  file = File.open("./fixtures/template_add_instance.json", "rb")
+  #file = File.open("./fixtures/template_add_instance.json", "rb")
+  file = File.open("./fixtures/template_3_instances.json", "rb")
   contents = file.read
   JSON.parse!(contents)
 end
@@ -39,7 +40,11 @@ end
 # (in this order)
 def modifications(hash, path='')
     hash.each do |k,v|
-      cur_path = "#{path}/#{k}"
+      if path != ''
+        cur_path = "#{path}/#{k}"
+      else
+        cur_path = "#{k}"
+      end
       # if we have an array then we have a modification
       # (and the array has 2 elements)
       if v.kind_of?(Array)
@@ -61,4 +66,4 @@ end
 new_h = new_template()
 old_h = actual_template()
 
-modifications(new_h.deep_diff(old_h))
+modifications(new_h['Resources'].deep_diff(old_h['Resources']))
