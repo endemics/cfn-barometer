@@ -22,16 +22,21 @@ end
 require 'pp'
 require 'json'
 
-def actual_template()
-  # If retrieved from `aws cloudformation get-template` we need to extract "TemplateBody"
-  file = File.open("./fixtures/template_base_instance.json", "rb")
-  contents = file.read
-  JSON.parse!(contents)
+def actual_template(opts)
+  profile = ''
+  if opts[:profile] then
+    profile = "--profile #{opts[:profile]}"
+  end
+  region = "--region #{opts[:region]}"
+  stack = "--stack-name #{opts[:stack]}"
+  cmd = "aws cloudformation get-template #{profile} #{stack} #{region}"
+
+  tpl = `#{cmd}`
+  JSON.parse!(tpl['TemplateBody'])
 end
 
-def new_template()
-  #file = File.open("./fixtures/template_add_instance.json", "rb")
-  file = File.open("./fixtures/template_3_instances.json", "rb")
+def new_template(file)
+  file = File.open(file, "rb")
   contents = file.read
   JSON.parse!(contents)
 end
