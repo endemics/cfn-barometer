@@ -63,7 +63,49 @@ def modifications(hash, path='')
     end
 end
 
-new_h = new_template()
-old_h = actual_template()
+require 'optparse'
+
+usage = "Usage: cfn-diff [options] (-s|--stack) STACKNAME TEMPLATE"
+
+options = {}
+options[:region] = 'us-east-1'
+options[:help] = false
+
+opt_parse = OptionParser.new do |opts|
+  opts.banner = usage
+
+  opts.on('-r REGION', "--region REGION", "AWS region (default to us-east-1)") do |r|
+    options[:region] = r
+  end
+
+  opts.on('-s STACKNAME', "--stack STACKNAME", "CFN stack name (mandatory)") do |s|
+    options[:stack] = s
+  end
+
+  opts.on('-p PROFILE', "--profile PROFILE", "AWS profile to use") do |p|
+    options[:profile] = p
+  end
+
+  opts.on('-h', "--help") do |h|
+    options[:help] = h
+    puts opts
+  end
+
+  options
+end
+
+opt_parse.parse!
+
+unless options[:help] then
+  options.fetch(:stack) do
+    abort("Missing STACKNAME!\n#{usage}")
+  end
+  if ARGV.size < 1 then
+    abort("Missing TEMPLATE!\n#{usage}")
+  end
+end
+
+new_h = new_template(ARGV[0])
+old_h = actual_template(options)
 
 modifications(new_h['Resources'].deep_diff(old_h['Resources']))
