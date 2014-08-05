@@ -32,7 +32,7 @@ def actual_template(opts)
   cmd = "aws cloudformation get-template #{profile} #{stack} #{region}"
 
   tpl = `#{cmd}`
-  JSON.parse!(tpl['TemplateBody'])
+  JSON.parse!(tpl)['TemplateBody']
 end
 
 def new_template(file)
