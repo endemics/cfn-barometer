@@ -9,4 +9,3 @@ See your CloudFormation changes before you push them
         -p, --profile PROFILE            AWS profile to use
         -h, --help
 
-Require the aws command line tool installed on your system and available in the PATH

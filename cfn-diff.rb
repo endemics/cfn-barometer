@@ -21,18 +21,17 @@ end
 
 require 'pp'
 require 'json'
+require 'aws-sdk'
 
 def actual_template(opts)
-  profile = ''
   if opts[:profile] then
-    profile = "--profile #{opts[:profile]}"
+    provider = AWS::Core::CredentialProviders::SharedCredentialFileProvider.new(profile_name: opts[:profile])
+    AWS.config(credential_provider: provider)
   end
-  region = "--region #{opts[:region]}"
-  stack = "--stack-name #{opts[:stack]}"
-  cmd = "aws cloudformation get-template #{profile} #{stack} #{region}"
-
-  tpl = `#{cmd}`
-  JSON.parse!(tpl)['TemplateBody']
+  AWS.config(region: opts[:region])
+  cfm = AWS::CloudFormation.new
+  tpl = cfm.stacks[opts[:stack]].template
+  JSON.parse!(tpl)
 end
 
 def new_template(file)
